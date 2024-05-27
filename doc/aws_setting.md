@@ -18,7 +18,7 @@ proto用の環境構築メモ(超簡易版)
 - パブリックサブネット: 2
 - プライベートサブネット: 0
 
-![vpc-proto.png](vpc−proto.png)
+![vpc-proto.png](./vpc-proto.png)
 
 ### seg grp
 
