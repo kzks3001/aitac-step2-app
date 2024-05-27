@@ -1,0 +1,26 @@
+version: '3.8'
+
+services:
+  jupyterlab:
+    build:
+      context: .
+    container_name: jupyterlab
+    ports:
+      - "8888:8888"
+    environment:
+      - MYSQL_USER=${MYSQL_USER}
+      - MYSQL_ROOT_PASSWORD=${MYSQL_ROOT_PASSWORD}
+      - MYSQL_HOST_NAME=${MYSQL_HOST_NAME}
+      - MYSQL_DB_NAME=${MYSQL_DB_NAME}
+    volumes:
+      - ./src:/home/src
+    command: "jupyter-lab --ip 0.0.0.0 --allow-root -b localhost --NotebookApp.token=''"
+  
+  phpmyadmin:
+    image: phpmyadmin/phpmyadmin
+    container_name: phpmyadmin
+    ports:
+      - "8080:80"
+    environment:
+      PMA_HOST: ${MYSQL_HOST_NAME}
+

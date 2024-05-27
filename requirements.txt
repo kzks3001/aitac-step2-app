@@ -1,0 +1,4 @@
+jupyterlab
+sqlalchemy
+numpy
+mysql-connector-python

@@ -1,0 +1,4 @@
+.env
+src/orm/__pycache__/*
+src/.ipynb_checkpoints/*
+src/orm/.ipynb_checkpoints/*
