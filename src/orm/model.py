@@ -23,6 +23,7 @@ class Data(Base):
 
     # カラム
     data_id = Column(INTEGER(unsigned=True),nullable=False,autoincrement=True,primary_key=True)
+    source = Column(String(255), nullable=False)
     date = Column(DateTime, nullable=False)
     temperature = Column(Numeric(10,2))
     humid = Column(Numeric(10,2))
@@ -32,6 +33,7 @@ class Data(Base):
 
     def create_data_record(
         self,
+        source,
         date,
         temperature,
         humid,
@@ -39,6 +41,7 @@ class Data(Base):
         data2,
         data3
     ):
+        self.source = source
         self.date = date
         self.temperature = temperature
         self.humid = humid
