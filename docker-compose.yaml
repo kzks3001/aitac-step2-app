@@ -3,7 +3,7 @@ version: '3.8'
 services:
   jupyterlab:
     build:
-      context: .
+      context: Docker_jupyterlab
     container_name: jupyterlab
     ports:
       - "8888:8888"
@@ -15,7 +15,23 @@ services:
     volumes:
       - ./src:/home/src
     command: "jupyter-lab --ip 0.0.0.0 --allow-root -b localhost --NotebookApp.token=''"
+
+  api-server:
+    build:
+      context: Docker_server
+    container_name: api-server
+    ports:
+      - "8081:8081"
+    volumes:
+      - ./src:/home/src
+    environment:
+      - MYSQL_USER=${MYSQL_USER}
+      - MYSQL_ROOT_PASSWORD=${MYSQL_ROOT_PASSWORD}
+      - MYSQL_HOST_NAME=${MYSQL_HOST_NAME}
+      - MYSQL_DB_NAME=${MYSQL_DB_NAME}
+    command: "python3 server.py"
   
+
   phpmyadmin:
     image: phpmyadmin/phpmyadmin
     container_name: phpmyadmin
@@ -24,3 +40,19 @@ services:
     environment:
       PMA_HOST: ${MYSQL_HOST_NAME}
 
+  mysql:
+    image: mysql:latest
+    container_name: mysql
+    environment:
+      - MYSQL_USER=${MYSQL_USER}
+      - MYSQL_ROOT_USER=${MYSQL_USER}
+      - MYSQL_ROOT_PASSWORD=${MYSQL_ROOT_PASSWORD}
+      - MYSQL_HOST_NAME=${MYSQL_HOST_NAME}
+      - MYSQL_DB_NAME=${MYSQL_DB_NAME}
+    ports:
+      - "3306:3306"
+    volumes:
+      - mysql_data:/var/lib/mysql
+
+volumes:
+  mysql_data:

@@ -9,5 +9,4 @@ RUN pip install -r requirements.txt
 
 WORKDIR /home/src
 
-COPY ./src /home/src/
 CMD [ "python", "/home/src/record_data.py" ] 
