@@ -11,7 +11,7 @@ from datetime import datetime
 
 
 
-logger = set_logger()
+
 
 url = "http://api-server:8081/register"
 source = 'test'
@@ -42,47 +42,50 @@ def set_logger():
     
     return logger
 
-while True:
+if __name__ == '__main__':
+    logger = set_logger()
 
-    time.sleep(time_sleep)
-    
-    cnt += 1
-    logger.info(f'\n{cnt} -------------------------------')
-    
-    data = {
-            "date" : datetime.now().isoformat(),
-            "temperature" : float(np.random.normal(loc=tempreture_mean, scale=temperature_std_dev)),
-            "humid" : float(np.random.normal(loc=humid_mean, scale=humid_std_dev)),
-            "source": source,
-            "data1" : random.uniform(0, 500),
-            "data2" :random.uniform(0, 500),
-            "data3" : True
-    }
-    
-    cache_data.append(data)
-    if len(cache_data) > cache_lim:
-        cache_data.pop(0)
-    
-    try:
+    while True:
 
-        # dummy エラー 下1桁が5未満ならエラー発生
-        if cnt % 10 < 5:
-            raise Exception('dummy error')
+        time.sleep(time_sleep)
         
-        response = requests.post(
-            url, 
-            headers={'Content-Type': 'application/json'},
-            data=json.dumps({"data_list": cache_data})
-        )
+        cnt += 1
+        logger.info(f'\n{cnt} -------------------------------')
         
-        response.raise_for_status()
+        data = {
+                "date" : datetime.now().isoformat(),
+                "temperature" : float(np.random.normal(loc=tempreture_mean, scale=temperature_std_dev)),
+                "humid" : float(np.random.normal(loc=humid_mean, scale=humid_std_dev)),
+                "source": source,
+                "data1" : random.uniform(0, 500),
+                "data2" :random.uniform(0, 500),
+                "data3" : True
+        }
+        
+        cache_data.append(data)
+        if len(cache_data) > cache_lim:
+            cache_data.pop(0)
+        
+        try:
 
-        logger.info('send success!')
-        logger.info(f'send items: {len(cache_data)}')
-        cache_data = []
-    except requests.exceptions.HTTPError as e:
-        logger.error('error!'+str(e))
-        logger.error(f'current cache num: {len(cache_data)}')
-    except Exception as e:
-        logger.error('error!'+str(e))
-        logger.error(f'current cache num: {len(cache_data)}')
+            # dummy エラー 下1桁が5未満ならエラー発生
+            if cnt % 10 < 5:
+                raise Exception('dummy error')
+            
+            response = requests.post(
+                url, 
+                headers={'Content-Type': 'application/json'},
+                data=json.dumps({"data_list": cache_data})
+            )
+            
+            response.raise_for_status()
+
+            logger.info('send success!')
+            logger.info(f'send items: {len(cache_data)}')
+            cache_data = []
+        except requests.exceptions.HTTPError as e:
+            logger.error('error!'+str(e))
+            logger.error(f'current cache num: {len(cache_data)}')
+        except Exception as e:
+            logger.error('error!'+str(e))
+            logger.error(f'current cache num: {len(cache_data)}')
